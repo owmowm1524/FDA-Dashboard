@@ -25,6 +25,16 @@
 
      <link rel="stylesheet" href="css/dropdowncalendar.css">
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Table with Download Options</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.2/html-docx.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -355,8 +365,9 @@
                             <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                         <div class="container mt-5">
+        <h2>Project Table with Download Options</h2>
+        <table class="table table-bordered" id="projectTable">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -412,7 +423,29 @@
                                         </tr>                                       
                                     </tbody>
                                 </table>
+                             <button class="btn btn-primary" onclick="downloadPDF()">Download as PDF</button>
+        <button class="btn btn-success" onclick="downloadExcel()">Download as Excel</button>
+        <button class="btn btn-info" onclick="downloadWord()">Download as Word</button>
                             </div>
+                            <script>
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.autoTable({ html: '#projectTable' });
+            doc.save('projects.pdf');
+        }
+
+        function downloadExcel() {
+            var wb = XLSX.utils.table_to_book(document.getElementById('projectTable'), {sheet:"Sheet JS"});
+            XLSX.writeFile(wb, 'projects.xlsx');
+        }
+
+        function downloadWord() {
+            var content = document.getElementById('projectTable').outerHTML;
+            var blob = htmlDocx.asBlob(content);
+            saveAs(blob, 'projects.docx');
+        }
+    </script>
                         </div>
                     </div>
 
